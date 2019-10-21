@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %} 
+  <h1 class="display-4 text-center my-5">{{question.title}}</h1><br><br>
+  <h3 class="">{{question.content}}</h3><br><br>
+  <h5 class="text-right">{{question.created_at}}</h5>
+  <h5 class="text-right">작성자 : {{question.user}}</h5>
+  
+  {% if question.user == user %}
+    <div class="d-inline">
+      <div class="text-right">
+        <a href="{% url 'gallery:update' question.id %}" class="btn btn-warning">수정</a>
+        <form action="{% url 'gallery:delete' question.id %}" method="POST" class="d-inline">
+          {% csrf_token %}
+          <input type="submit" value="삭제" class="btn btn-danger">
+        </form>
+      </div>
+    </div>
+  {% endif %} 
+  <div class="progress my-3">
+    <div class="progress-bar bg-primary" role="progressbar" style="width: {{cnt.ratio_a}}%">좋아요 : {{cnt.cnt_a}}개</div>
+    <div class="progress-bar bg-danger" role="progressbar" style="width: {{cnt.ratio_b}}%">싫어요 : {{cnt.cnt_b}}개</div>
+  </div>
+
+  <hr>
+
+  <div class="my-2 noto">
+    <form action="{% url 'gallery:create_comment' question.id %}" method="POST" class="">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      <div class="text-right">
+        <input type="submit" value="등록" class="btn btn-primary">
+      </div>
+    </form>
+  </div>
+
+  <hr>
+    <p class="noto">
+      <button class="btn btn-dark col-12" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        댓글보기
+      </button>
+    </p>
+    <div class="collapse noto" id="collapseExample">
+      <div class="card card-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">댓글 작성자</th>
+              <th scope="col">댓글 내용</th>
+              <th scope="col">댓글 게시일</th>
+              <th scope="col">수정 및 삭제</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for comment in comments %}
+            <tr>
+              <td><p class="noto">{{comment.user}}</p></td>
+              <th>{{comment.content}}</th>
+              <td>{{comment.created_at}}</td>
+              {% if comment.user == user %}
+              <td>
+                <a href="{% url 'gallery:update_comment' question.id comment.id %}" class="btn btn-outline-warning">수정</a>
+                <form action="{% url 'gallery:delete_comment' question.id comment.id %}" method="POST" class="d-inline">
+                  {% csrf_token %}
+                  <input type="submit" value="삭제" class="btn btn-outline-danger">
+                </form>
+              </td>
+              {% else %}
+                <td>
+                  <h5>권한없음</h5>
+                </td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+
+{% endblock %}
+

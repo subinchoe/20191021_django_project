@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block body %}
+  <form action="" method="POST" class="my-5">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <input type="submit" value="올리기" class="btn btn-outline-primary">
+  </form>
+{% endblock %}

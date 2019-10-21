@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block body %} 
+  <h1 class="display-4 text-center my-5">게시판</h1>
+  <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">No.</th>
+          <th scope="col">DISTINCT</th>
+          <th scope="col">TITLE</th>
+          <th scope="col">USERNAME</th>
+          <th scope="col">CREATED_AT</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for question in questions %}
+          <tr class="noto">
+            <th scope="row">{{question.id}}</th>
+            <td>{{question.kind}}</td>
+            <td>
+              <a href="{% url 'gallery:detail' question.id %}" class="text-dark">{{question.title}}
+                <h5 class="d-inline">
+                  <span class="badge badge-info mx-2">
+                    {{question.comment_set.all.count}}
+                  </span> 
+                </h5>
+              </a>
+            </td>
+            <td>{{question.user}}</td>
+            <td><p>{{question.created_at}}</p></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endblock %}
