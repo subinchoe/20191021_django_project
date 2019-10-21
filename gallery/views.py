@@ -49,9 +49,9 @@ def detail(request, id):
     question = get_object_or_404(Question, id=id)
     form = CommentForm()
     comments = Comment.objects.filter(question=question).order_by('-id')
+    cnt_a = question.comment_set.filter(pick="1").count()
+    cnt_b = question.comment_set.filter(pick="2").count()
     if question.comment_set.all():
-        cnt_a = question.comment_set.filter(pick="1").count()
-        cnt_b = question.comment_set.filter(pick="2").count()
         cnt_all = cnt_a + cnt_b
         ratio_a = cnt_a / cnt_all * 100
         ratio_b = cnt_b / cnt_all * 100
