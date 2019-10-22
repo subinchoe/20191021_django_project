@@ -9,6 +9,7 @@ class Question(models.Model):
     content = models.TextField()
     created_at = models.DateField(auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='likes_questions')
     
 
 class Comment(models.Model):
@@ -17,5 +18,7 @@ class Comment(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     pick = models.IntegerField()
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='likes_comments')
+
     
 

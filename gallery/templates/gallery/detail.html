@@ -19,10 +19,17 @@
     </div>
   {% endif %} 
   <div class="progress my-3">
-    <div class="progress-bar bg-primary" role="progressbar" style="width: {{cnt.ratio_a}}%">좋아요 : {{cnt.cnt_a}}개</div>
-    <div class="progress-bar bg-danger" role="progressbar" style="width: {{cnt.ratio_b}}%">싫어요 : {{cnt.cnt_b}}개</div>
+    <div class="progress-bar bg-primary" role="progressbar" style="width: {{cnt.ratio_a}}%">추천 : {{cnt.cnt_a}}개</div>
+    <div class="progress-bar bg-danger" role="progressbar" style="width: {{cnt.ratio_b}}%">비추천 : {{cnt.cnt_b}}개</div>
   </div>
 
+  <div class="d-flex justify-content-center">
+    {% if user in question.like_users.all %}
+      <a href="{% url 'gallery:like' question.id %}" class="btn btn-primary">좋아요 : {{like_cnt}}</a>
+    {% else %}
+      <a href="{% url 'gallery:like' question.id %}" class="btn btn-light">좋아요 : {{like_cnt}}</a>
+    {% endif %}
+  </div>
   <hr>
 
   <div class="my-2 noto">
@@ -50,6 +57,7 @@
               <th scope="col">댓글 내용</th>
               <th scope="col">댓글 게시일</th>
               <th scope="col">수정 및 삭제</th>
+              <th scope="col">좋아요</th>
             </tr>
           </thead>
           <tbody>
@@ -70,6 +78,11 @@
                 <td>
                   <h5>권한없음</h5>
                 </td>
+              {% endif %}
+              {% if user in comment.like_users.all %}
+                <td><a href="{% url 'gallery:comment_like' question.id comment.id %}" class="btn btn-primary">좋아요 {{comment.like_users.all.count}}</a></td>
+              {% else %}
+                <td><a href="{% url 'gallery:comment_like' question.id comment.id %}" class="btn btn-light">좋아요 {{comment.like_users.all.count}}</a></td>
               {% endif %}
             </tr>
             {% endfor %}

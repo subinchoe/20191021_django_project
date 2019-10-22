@@ -9,6 +9,10 @@ urlpatterns=[
     path('<int:id>/update/', views.update, name="update"),
     path('<int:id>/delete/', views.delete, name="delete"),
     path('<int:id>/', views.detail, name="detail"),
+    path('<int:id>/like', views.like, name="like"),
+
+    path('<int:question_id>/comment_like/<int:comment_id>', views.comment_like, name="comment_like"),
+
     path('<int:id>/create/comment', views.create_comment, name="create_comment"),
     path('<int:question_id>/delete/comment/<int:comment_id>', views.delete_comment, name="delete_comment"),
     path('<int:question_id>/update/comment/<int:comment_id>', views.update_comment, name="update_comment"), 

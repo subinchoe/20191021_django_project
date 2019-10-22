@@ -51,6 +51,8 @@ def detail(request, id):
     comments = Comment.objects.filter(question=question).order_by('-id')
     cnt_a = question.comment_set.filter(pick="1").count()
     cnt_b = question.comment_set.filter(pick="2").count()
+    like_cnt = question.like_users.all().count()
+    
     if question.comment_set.all():
         cnt_all = cnt_a + cnt_b
         ratio_a = cnt_a / cnt_all * 100
@@ -75,8 +77,38 @@ def detail(request, id):
         'form': form,
         'cnt': cnt,
         'comments': comments,
+        'like_cnt': like_cnt,
     }
     return render(request, 'gallery/detail.html', context)
+
+
+@login_required
+def like(request, id):
+    question = get_object_or_404(Question, id=id)
+    user = request.user
+
+    if question.like_users.filter(id=user.id):
+        question.like_users.remove(user)
+    else:
+        question.like_users.add(user)
+
+
+    return redirect('gallery:detail', id)
+
+@login_required
+def comment_like(request, question_id, comment_id):
+    # question = get_object_or_404(Question,id=question_id)
+    comment = get_object_or_404(Comment,id=comment_id)
+    user = request.user
+
+    if comment.like_users.filter(id=user.id):
+        comment.like_users.remove(user)
+    else:
+        comment.like_users.add(user)
+
+
+    return redirect('gallery:detail', question_id)
+
 
 @login_required
 def create_comment(request, id):
